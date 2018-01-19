@@ -169,7 +169,7 @@ module.exports = function makeWebpackConfig() {
     // Workaround needed for angular 2 angular/angular#11580
     new webpack.ContextReplacementPlugin(
       // The (\\|\/) piece accounts for path separators in *nix and Windows
-      /angular(\\|\/)core(\\|\/)@angular/,
+      /angular(\\|\/)core(\\|\/)(@angular|esm5)/, 
       root('./src') // location of your src
     ),
 
@@ -195,8 +195,8 @@ module.exports = function makeWebpackConfig() {
         /**
          * PostCSS
          * Reference: https://github.com/postcss/autoprefixer-core
-         * Add vendor prefixes to your css
-         */
+         * Add vendor prefixes to your css*/
+
         postcss: [
           autoprefixer({
             browsers: ['last 2 version']
@@ -205,6 +205,22 @@ module.exports = function makeWebpackConfig() {
       }
     })
   ];
+
+module.exports = {
+  module: {
+    rules: [
+      {
+        test: /\.css$/,
+        use: [
+          'style-loader',
+          { loader: 'css-loader', options: { importLoaders: 1 } },
+          'postcss-loader'
+        ]
+      }
+    ]
+  }
+}
+
 
   if (!isTest && !isTestWatch) {
     config.plugins.push(

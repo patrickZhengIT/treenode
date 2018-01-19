@@ -1,17 +1,28 @@
-<header>
-  <nav>
-    <a [routerLink]="['']">Home</a>
-    <a [routerLink]="['about']">About</a>
-  </nav>
-</header>
 <main>
-  <h1>Hello from {{title}}!</h1>
+<div class="container">
+    <h1>Add or Remove Nodes</h1>
+    <form #nodeForm="ngForm" (ngSubmit)="add()">
+      <div class="form-group">
+        <label for="name">Name</label>
+        <input type="text" class="form-control" id="name" required [(ngModel)]="name" name='name' #entername="ngModel">
+        <div [hidden]="entername.valid || entername.pristine"
+             class="alert alert-danger">
+          Name is required
+        </div>
+      </div>
 
-  <!-- Images (and assets) are parsed and loaded from within the public directory -->
-  <img src="/img/angular.png">
 
-  <router-outlet></router-outlet>
+      <div class="form-group">
+        <label for="amount">Amount</label>
+        <input type="text" class="form-control" id="amount" [(ngModel)]="amount" name='amount'>
+      </div>
+
+      <button type="submit" class="btn btn-success" [disabled]="!nodeForm.form.valid">Add Child node to selected node</button>
+
+
+    </form>
+    <button (click)='delete()'>Delete selected node</button>
+</div>
+<tree-root #tree [nodes]="nodes" [options]="options"></tree-root>
 </main>
-<footer>
-  <a [href]="url">Webpack Angular 2 Starter</a>
-</footer>
+
