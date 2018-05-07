@@ -1,44 +1,33 @@
-import { NgModule, ApplicationRef } from '@angular/core';
+import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { HttpModule } from '@angular/http';
 import { FormsModule } from '@angular/forms';
 
+import { Router } from '@angular/router';
+
 import { AppComponent } from './app.component';
-import { TreeModule } from 'angular-tree-component';
+import { AppRoutingModule } from './app.routing';
 
-
-import { removeNgStyles, createNewHosts } from '@angularclass/hmr';
-
+import { TreenodeModule } from './treenode/treenode.module'
+import { PageNotFoundComponent }   from './not-found.component';
 @NgModule({
   imports: [
     BrowserModule,
     HttpModule,
     FormsModule,
-    TreeModule
+    TreenodeModule,
+    AppRoutingModule
   ],
   declarations: [
-    AppComponent
+    AppComponent,
+    PageNotFoundComponent,
   ],
   providers: [
-
   ],
   bootstrap: [AppComponent]
 })
-export class AppModule {
-  constructor(public appRef: ApplicationRef) {}
-  hmrOnInit(store) {
-    console.log('HMR store', store);
-  }
-  hmrOnDestroy(store) {
-    let cmpLocation = this.appRef.components.map(cmp => cmp.location.nativeElement);
-    // recreate elements
-    store.disposeOldHosts = createNewHosts(cmpLocation);
-    // remove styles
-    removeNgStyles();
-  }
-  hmrAfterDestroy(store) {
-    // display new elements
-    store.disposeOldHosts();
-    delete store.disposeOldHosts;
+export class AppModule {  // Diagnostic only: inspect router configuration
+  constructor(router: Router) {
+    console.log('Routes: ', JSON.stringify(router.config, undefined, 2));
   }
 }
