@@ -1,149 +1,95 @@
-# angular-webpack
+# tree-node
 
-[![Dependency Status](https://david-dm.org/preboot/angular-webpack/status.svg)](https://david-dm.org/preboot/angular-webpack#info=dependencies) [![devDependency Status](https://david-dm.org/preboot/angular-webpack/dev-status.svg)](https://david-dm.org/preboot/angular-webpack#info=devDependencies)
-[![Join the chat at https://gitter.im/preboot/angular-webpack](https://badges.gitter.im/preboot/angular-webpack.svg)](https://gitter.im/preboot/angular-webpack?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+The project is to demonstrate my coding style, as well as my understanding of programming.
 
-A complete, yet simple, starter for Angular v2+ using Webpack.
+The application would load data from local csv file, display the data with tree component, and it also allows user to add/remove the node with strict form validation.
 
-This seed repo serves as an Angular starter for anyone looking to get up and running with Angular and TypeScript fast. Using [Webpack](http://webpack.github.io/) for building our files and assisting with boilerplate. We're also using Protractor for our end-to-end story and Karma for our unit tests.
-* Best practices in file and application organization for [Angular](https://angular.io/).
-* Ready to go build system using [Webpack](https://webpack.github.io/docs/) for working with [TypeScript](http://www.typescriptlang.org/).
-* Testing Angular code with [Jasmine](http://jasmine.github.io/) and [Karma](http://karma-runner.github.io/).
-* Coverage with [Istanbul](https://github.com/gotwarlost/istanbul)
-* End-to-end Angular code using [Protractor](https://angular.github.io/protractor/).
-* Stylesheets with [SASS](http://sass-lang.com/) (not required, it supports regular css too).
-* Error reported with [TSLint](http://palantir.github.io/tslint/) and [Codelyzer](https://github.com/mgechev/codelyzer).
-* Documentation with [TypeDoc](http://typedoc.org/).
+The application is built with Angular5. And 'angular-tree-component' (https://github.com/500tech/angular-tree-component) is used for displaying the tree. 
 
->Warning: Make sure you're using the latest version of Node.js and NPM
+# Table of Contents
 
-### Quick start
+* [Requirement of the project](#requirement)
+* [Description of the project](#description)
+  * [Node Display](#node-display)
+  * [Node Management](#node-management)
+* [Assumptions](#assumptions)
+* [Install instruction](#install-instruction)
+ 
+#Requirement:
+1. The csv file contains 1000 row of a tree structure data.
+2. The application should read and display the data using a tree component. 
+3. Each row contains a `amount` value. Display the information on screen. Parent tree node should show the sum of all children. (PLEASE NOTE:`amount` value for parent node is incorrect in the csv file, the application will need to recalculate it.)
+4. The application should also allow user to add or remove a tree node.
+
+# Description
+
+After running the application, the html will show two areas. The top is related to node management functions, and the below is related to node displaying functions.
+
+## Node Display
+
+All the nodes are displayed in a tree component. You can click on a root node to see its childen. The screen will show the name of the code along with the amount of it. The amount shows two digits after the decimal point.
+
+## Node Management
+
+### Add node
+
+The screen will tell you to enter the name and the amount of the new node. There are two ways of adding the node. First, you could first select a node in the node displaying area below, enter the name and amount, then add it as a child note to the selected node. Note that if you have not selected any node, there will be an alert to tell you to select a node. Second, you could add the node as a root node. In this way, you do not need to select a node first.
+
+After adding the node, the amounts of the all nodes will be recalculated instantly. 
+
+### Delete node
+
+Once you select a node in the node displaying area, you could use the button to delete the node. If no node is currently selected, there will be an alert to tell you to select a node. 
+
+After deleting the node, the amounts of all nodes will be recalculated spontaneously. 
+
+### Form validation
+
+The name and amount field have strict validations.
+
+The name should not be empty. The label will show green if the requirement is met. If not, the label will remain red. After editing the name, if the name is empty, there will be alerts showing in the below.
+
+The amount field is 0 by default. Only postive numbers and 0 are allowed in this field. 
+
+For example, '84', '8.4', '034' are all acceptable. ('034' is equal to 34)
+
+Whereas 'g84', 'good', '8.', '-8' are not acceptable, and there will be an alert showing below.
+
+# Assumptions
+
+Here I assume the application is used by people to view the amount and the value of the node, and may add/remove a node to see how it affects the whole nodes. So the system is designed that people could select the node intuitively from the view and do the operations, instead of entering the info like 'adding a node whose parent id is 1'. The amount value will be instantly recalculated so people could see the impact. 
+
+Also, I assume the name of the node should not be empty and the amount of the node is a positive number or 0. And nodes with same name or amount are allowed.
+
+I tried my best for the design of the project, but there may still be some improvements.  
+
+# Install instruction
+
+What you need to run this app:
+* `node` and `npm` 
+* Ensure you're running Node (`v6.x.x`+) and NPM (`3.x.x`+)
+
+## Installing
 
 ```bash
-# clone our repo
-$ git clone https://github.com/preboot/angular-webpack.git my-app
-
-# change directory to your app
-$ cd my-app
-
 # install the dependencies with npm
 $ npm install
 
 # start the server
 $ npm start
 ```
-go to [http://localhost:8080](http://localhost:8080) in your browser.
-
-# Table of Contents
-
-* [Getting Started](#getting-started)
-    * [Dependencies](#dependencies)
-    * [Installing](#installing)
-    * [Developing](#developing)
-    * [Testing](#testing)
-    * [Production](#production)
-    * [Documentation](#documentation)
-* [Frequently asked questions](#faq)
-* [TypeScript](#typescript)
-* [License](#license)
-
-# Getting Started
-
-## Dependencies
-
-What you need to run this app:
-* `node` and `npm` (Use [NVM](https://github.com/creationix/nvm))
-* Ensure you're running Node (`v6.x.x`+) and NPM (`3.x.x`+)
-
-## Installing
-
-* `fork` this repo
-* `clone` your fork
-* `npm install` to install all dependencies
-
-## Developing
-
-After you have installed all dependencies you can now start developing with:
-
-* `npm start`
-
 It will start a local server using `webpack-dev-server` which will watch, build (in-memory), and reload for you. The application can be checked at `http://localhost:8080`.
 
-As an alternative, you can work using Hot Module Replacement (HMR):
 
-* `npm run start:hmr`
 
-And you are all set! You can now modify your components on the fly without having to reload the entire page.
 
-## Testing
 
-#### 1. Unit Tests
 
-* single run: `npm test`
-* live mode (TDD style): `npm run test-watch`
 
-#### 2. End-to-End Tests (aka. e2e, integration)
 
-* single run:
-  * in a tab, *if not already running!*: `npm start`
-  * in a new tab: `npm run webdriver-start`
-  * in another new tab: `npm run e2e`
-* interactive mode:
-  * instead of the last command above, you can run: `npm run e2e-live`
-  * when debugging or first writing test suites, you may find it helpful to try out Protractor commands without starting up the entire test suite. You can do this with the element explorer.
-  * you can learn more about [Protractor Interactive Mode here](https://github.com/angular/protractor/blob/master/docs/debugging.md#testing-out-protractor-interactively)
 
-## Production
 
-To build your application, run:
 
-* `npm run build`
 
-You can now go to `/dist` and deploy that to your server!
 
-## Documentation
 
-You can generate api docs (using [TypeDoc](http://typedoc.org/)) for your code with the following:
-
-* `npm run docs`
-
-# FAQ
-
-#### Do I need to add script / link tags into index.html ?
-
-No, Webpack will add all the needed Javascript bundles as script tags and all the CSS files as link tags. The advantage is that you don't need to modify the index.html every time you build your solution to update the hashes.
-
-#### How to include external angular libraries ?
-
-It's simple, just install the lib via npm and import it in your code when you need it. Don't forget that you need to configure some external libs in the [bootstrap](https://github.com/preboot/angular-webpack/blob/master/src/main.ts) of your application.
-
-#### How to include external css files such as bootstrap.css ?
-
-Just install the lib and import the css files in [vendor.ts](https://github.com/preboot/angular-webpack/blob/master/src/vendor.ts). For example this is how to do it with bootstrap:
-
-```sh
-npm install bootstrap@next --save
-```
-
-And in [vendor.ts](https://github.com/preboot/angular-webpack/blob/master/src/vendor.ts) add the following:
-
-```ts
-import 'bootstrap/dist/css/bootstrap.css';
-```
-
-# TypeScript
-
-> To take full advantage of TypeScript with autocomplete you would have to use an editor with the correct TypeScript plugins.
-
-## Use a TypeScript-aware editor
-
-We have good experience using these editors:
-
-* [Visual Studio Code](https://code.visualstudio.com/)
-* [Webstorm 11+](https://www.jetbrains.com/webstorm/download/)
-* [Atom](https://atom.io/) with [TypeScript plugin](https://atom.io/packages/atom-typescript)
-* [Sublime Text](http://www.sublimetext.com/3) with [Typescript-Sublime-Plugin](https://github.com/Microsoft/Typescript-Sublime-plugin#installation)
-
-# License
-
-[MIT](/LICENSE)
