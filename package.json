@@ -54,7 +54,7 @@
     "@types/selenium-webdriver": "latest",
     "angular2-template-loader": "latest",
     "autoprefixer": "latest",
-    "awesome-typescript-loader": "latest",
+    "awesome-typescript-loader": "3.4.1",
     "codelyzer": "latest",
     "copy-webpack-plugin": "latest",
     "css-loader": "latest",

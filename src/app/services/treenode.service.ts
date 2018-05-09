@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { TreenodeApiService } from './treenodeApi.service';
+import { map } from 'rxjs/operators';
 
 import * as _ from 'lodash';
 
@@ -12,10 +13,12 @@ export class TreenodeService {
   getData() {
     // Read from local csv file, clean the data and calculate the amount
     return this.apiService.getData()
-      .map( data => Papa.parse(data, {header: true}))
-      .map( data => this.prepare(data.data))
-      .map( data => this.list_to_tree(data))
-      .map( data => this.calculate(data));
+    .pipe(
+      map( data => Papa.parse(data, {header: true})),
+      map( data => this.prepare(data.data)),
+      map( data => this.list_to_tree(data)),
+      map( data => this.calculate(data))
+    );
   }
 
   prepare(array) {
@@ -54,10 +57,10 @@ export class TreenodeService {
   }
 
   list_to_tree(list) {
-    let map = {}, node, roots = [];
+    let localMap = {}, node, roots = [];
 
     _.each(list, (data, index) => {
-      map[_.get(data, 'id')] = index; // initialize the map
+      localMap[_.get(data, 'id')] = index; // initialize the map
       data.children = []; // initialize the children
     });
 
@@ -65,7 +68,7 @@ export class TreenodeService {
       node = data;
       if (_.get(node, 'parent_id') !== _.get(node, 'id')) {
         // Push the node according to the map
-        list[map[_.get(node, 'parent_id')]].children.push(node);
+        list[localMap[_.get(node, 'parent_id')]].children.push(node);
       } else {
         roots.push(node);
       }
