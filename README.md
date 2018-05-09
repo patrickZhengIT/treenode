@@ -4,7 +4,7 @@ The project is to demonstrate my coding style, as well as my understanding of pr
 
 The application would load data from local csv file, display the data with tree component, and it also allows user to add/remove the node with strict form validation.
 
-The application is built with Angular5. And 'angular-tree-component' (https://github.com/500tech/angular-tree-component) is used for displaying the tree. 
+The application is built with Angular5. It uses the boilderplate from angular-webpack(https://github.com/preboot/angular-webpack). And 'angular-tree-component' (https://github.com/500tech/angular-tree-component) is used for displaying the tree. 
 
 # Table of Contents
 
