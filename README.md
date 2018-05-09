@@ -15,7 +15,7 @@ The application is built with Angular5. And 'angular-tree-component' (https://gi
 * [Assumptions](#assumptions)
 * [Install instruction](#install-instruction)
  
-#Requirement:
+# Requirement:
 1. The csv file contains 1000 row of a tree structure data.
 2. The application should read and display the data using a tree component. 
 3. Each row contains a `amount` value. Display the information on screen. Parent tree node should show the sum of all children. (PLEASE NOTE:`amount` value for parent node is incorrect in the csv file, the application will need to recalculate it.)
