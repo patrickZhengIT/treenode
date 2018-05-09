@@ -4,9 +4,10 @@ import { FormsModule } from '@angular/forms';
 import { TreeModule } from 'angular-tree-component';
 
 import { TreenodeComponent } from './treenode.component';
+import { TreenodeManageComponent } from './treenodeManage.component';
 
-import { TreenodeService } from '../services/treenode.service'
-
+import { TreenodeService } from '../services/treenode.service';
+import { TreenodeApiService } from '../services/treenodeApi.service'
 import { TreenodeRoutingModule } from './treenode.routing';
 
 @NgModule({
@@ -17,10 +18,12 @@ import { TreenodeRoutingModule } from './treenode.routing';
     TreenodeRoutingModule
   ],
   declarations: [
-    TreenodeComponent
+    TreenodeComponent,
+    TreenodeManageComponent
   ],
   providers: [
-    TreenodeService
+    TreenodeService,
+    TreenodeApiService
   ]
 })
 

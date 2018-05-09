@@ -3,76 +3,52 @@ import { TreeComponent } from 'angular-tree-component';
 
 import { TreenodeService } from '../services/treenode.service'
 
-declare var Papa: any;
+import * as _ from 'lodash';
 @Component({
   templateUrl: './treenode.component.html',
   styleUrls: ['./treenode.component.scss'],
 })
 export class TreenodeComponent implements OnInit {
   @ViewChild('tree') tree: TreeComponent
-  nodes = [];
-  name;
-  amount = 0;
-// addroot: determine whether the node is added from the root
-  addroot = false;
-  options = {
-     displayField: 'display'
+  readonly treenodeOptions = {
+    displayField: 'display'
   };
+  nodes = [];
+  treemodel;
+  options;
 
   constructor(
     private service: TreenodeService
   ) {}
 
   ngOnInit() {
-    let treemodel = this.tree.treeModel;
-    let txt = '';
-    let xmlhttp = new XMLHttpRequest();
-// Read from local csv file, clean the data and calculate the amount
-    xmlhttp.onreadystatechange = () => {
-      if (xmlhttp.status === 200 && xmlhttp.readyState === 4) {
-        txt = xmlhttp.responseText;
-        let result = Papa.parse(txt, {
-           header: true
-        });
-        result = this.service.prepare(result.data);
-        let treenode = this.service.list_to_tree(result);
-        this.nodes = this.service.calculate(treenode);
-        treemodel.update();
-      }
-    };
-    xmlhttp.open('GET', 'sampledata.csv', true);
-    xmlhttp.send();
+    this.treemodel = this.tree.treeModel;
+    this.options = this.treenodeOptions;
+    this.service.getData().subscribe( data => {
+      this.nodes = data;
+      this.treemodel.update();
+    });
   }
 
   delete() {
+    let node = this.treemodel.getActiveNode();
 
-   let treemodel = this.tree.treeModel;
-   let node = treemodel.getActiveNode();
-
-   if (node !== undefined) {
-     let Index = node.index;
-     let Parent = node.parent;
-     let Children = Parent.getField('children');
-     Children.splice(Index, 1);
-     this.nodes = this.service.calculate(this.nodes);
-     treemodel.update();
+    if (node !== undefined) {
+      let Children = _.get(node, 'parent').getField('children');
+      Children.splice(_.get(node, 'index'), 1);
+      this.nodes = this.service.calculate(this.nodes);
+      this.treemodel.update();
    } else {
-     alert('Please select a node first!');
+      alert('Please select a node first!');
    }
-
   }
 
-  addtoRoot() {
-    this.addroot = true;
-  }
+  add(data) {
+    let node = this.treemodel.getActiveNode();
+    let addroot = _.get(data, 'addroot');
 
-  add() {
-    let treemodel = this.tree.treeModel;
-    let node = treemodel.getActiveNode();
-
-    if (this.addroot === true) {
-      node = treemodel.virtualRoot;
-      this.addroot = false;
+    if (addroot === true) {
+      node = _.get(this.treemodel, 'virtualRoot');
     }
 
     if (node === undefined) {
@@ -83,16 +59,14 @@ export class TreenodeComponent implements OnInit {
     if (!node.getField('children')) {
       node.setField('children', []);
     }
-    let children = node.getField('children');
-    children.push({
-      name: this.name,
-      amount: Number(this.amount),
+
+    node.getField('children').push({
+      name: _.get(data, 'name'),
+      amount: _.get(data, 'amount'),
       children: []
     })
 
    this.nodes = this.service.calculate(this.nodes);
-   treemodel.update();
-
+   this.treemodel.update();
   }
-
 }

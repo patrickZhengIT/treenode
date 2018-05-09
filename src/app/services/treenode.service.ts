@@ -1,18 +1,33 @@
 import { Injectable } from '@angular/core';
+import { TreenodeApiService } from './treenodeApi.service';
 
 import * as _ from 'lodash';
 
+declare var Papa: any;
 @Injectable()
 export class TreenodeService {
+
+  constructor(private apiService: TreenodeApiService) {}
+
+  getData() {
+    // Read from local csv file, clean the data and calculate the amount
+    return this.apiService.getData()
+      .map( data => Papa.parse(data, {header: true}))
+      .map( data => this.prepare(data.data))
+      .map( data => this.list_to_tree(data))
+      .map( data => this.calculate(data));
+  }
 
   prepare(array) {
 // It appears that after reading, the last element is not valid, so here deletes the last element of the array
     array = _.dropRight(array);
 // Clean the data, change the type of the data from string to number
     _.each(array, data => {
-      data.amount = _.toNumber(_.get(data, 'amount'));
-      data.id = _.toNumber(_.get(data, 'id'));
-      data.parent_id = _.toNumber(_.get(data, 'parent_id'));
+      _.forOwn(data, (value, key) => {
+        if (key !== 'name') {
+          data[key] = _.toNumber(value);
+        }
+      })
     });
     return array;
   }
@@ -31,11 +46,9 @@ export class TreenodeService {
         k = k + _.get(data, 'amount');
       })
       node.amount = k;
-// Use toFixed() so that the screen does not display strange number
-      node.display = _.get(node, 'name') + ' ' + _.get(node, 'amount').toFixed(2);
-    } else {
-      node.display = _.get(node, 'name') + ' ' + _.get(node, 'amount').toFixed(2);
     }
+
+    node.display = _.get(node, 'name') + ' ' + _.get(node, 'amount').toFixed(2);
 
     return node;
   }
@@ -54,9 +67,10 @@ export class TreenodeService {
         // Push the node according to the map
         list[map[_.get(node, 'parent_id')]].children.push(node);
       } else {
-          roots.push(node);
+        roots.push(node);
       }
     });
+
     return roots;
   }
 }
